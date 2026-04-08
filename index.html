@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pumpkin — Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg: #08070f;
+  --bg2: #0e0c1a;
+  --fg: #ede9f8;
+  --muted: rgba(237,233,248,0.38);
+  --border: rgba(160,130,255,0.1);
+  --acc: #a855f7;
+  --acc2: #7c3aed;
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--fg); font-family: 'Outfit', sans-serif; font-weight: 300; cursor: none; overflow-x: hidden; }
+
+/* CURSOR */
+#cur { position: fixed; width: 8px; height: 8px; background: var(--acc); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); }
+#cur-r { position: fixed; width: 32px; height: 32px; border: 1px solid rgba(168,85,247,0.45); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width 0.3s, height 0.3s; }
+
+/* NOISE */
+body::after { content:''; position:fixed; inset:0; background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); opacity:0.025; pointer-events:none; z-index:999; }
+
+/* NAV */
+nav { position:fixed; top:0; left:0; right:0; z-index:400; display:flex; justify-content:space-between; align-items:center; padding:1.75rem 4rem; backdrop-filter:blur(20px); background:rgba(8,7,15,0.75); border-bottom:1px solid var(--border); }
+.n-logo { font-family:'Playfair Display',serif; font-size:1.1rem; color:var(--fg); text-decoration:none; }
+.n-links { display:flex; gap:2.5rem; list-style:none; }
+.n-links a { font-size:0.72rem; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); text-decoration:none; transition:color 0.2s; }
+.n-links a:hover { color:var(--acc); }
+.n-dot { display:flex; align-items:center; gap:8px; font-size:0.7rem; color:var(--muted); letter-spacing:0.1em; }
+.n-dot span { width:6px; height:6px; border-radius:50%; background:#86efac; animation:blink 2.5s infinite; }
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.25} }
+
+/* HERO */
+.hero { min-height:100vh; display:flex; flex-direction:column; justify-content:center; padding:10rem 4rem 5rem; position:relative; overflow:hidden; }
+.g1 { position:absolute; width:650px; height:650px; border-radius:50%; background:radial-gradient(circle,rgba(124,58,237,0.18) 0%,transparent 70%); top:-120px; right:-120px; pointer-events:none; animation:f1 14s ease-in-out infinite alternate; }
+.g2 { position:absolute; width:420px; height:420px; border-radius:50%; background:radial-gradient(circle,rgba(168,85,247,0.1) 0%,transparent 70%); bottom:-60px; left:-80px; pointer-events:none; animation:f2 11s ease-in-out infinite alternate; }
+@keyframes f1 { 0%{transform:translate(0,0)} 100%{transform:translate(-70px,90px)} }
+@keyframes f2 { 0%{transform:translate(0,0)} 100%{transform:translate(50px,-50px)} }
+
+.hero-tag { font-size:0.68rem; letter-spacing:0.22em; text-transform:uppercase; color:var(--acc); margin-bottom:2rem; display:flex; align-items:center; gap:12px; opacity:0; animation:up 0.9s 0.2s forwards; }
+.hero-tag::before { content:''; width:24px; height:1px; background:var(--acc); }
+
+.hero h1 { font-family:'Playfair Display',serif; font-size:clamp(3.8rem,9vw,8.5rem); line-height:0.92; letter-spacing:-0.03em; color:var(--fg); margin-bottom:2.5rem; opacity:0; animation:up 1s 0.35s forwards; }
+.hero h1 .ghost { color:transparent; -webkit-text-stroke:1.5px rgba(168,85,247,0.28); font-style:italic; }
+.hero h1 .purple { color:var(--acc); }
+
+.hero-row { display:flex; justify-content:space-between; align-items:flex-end; padding-top:2.5rem; border-top:1px solid var(--border); opacity:0; animation:up 1s 0.55s forwards; }
+.hero-bio { font-size:0.88rem; line-height:1.95; color:var(--muted); max-width:360px; }
+.hero-btns { display:flex; gap:0.9rem; }
+
+@keyframes up { from{opacity:0;transform:translateY(28px)} to{opacity:1;transform:translateY(0)} }
+
+/* BUTTONS */
+.btn { font-family:'Outfit',sans-serif; font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; padding:0.85rem 1.9rem; border:none; cursor:none; text-decoration:none; display:inline-block; transition:all 0.25s; }
+.btn-solid { background:var(--acc); color:#fff; box-shadow:0 0 28px rgba(168,85,247,0.22); }
+.btn-solid:hover { background:var(--acc2); box-shadow:0 0 40px rgba(168,85,247,0.38); }
+.btn-line { background:transparent; color:var(--muted); border:1px solid var(--border); }
+.btn-line:hover { color:var(--fg); border-color:rgba(168,85,247,0.35); }
+
+/* MARQUEE */
+.marquee { border-top:1px solid var(--border); border-bottom:1px solid var(--border); padding:1rem 0; overflow:hidden; white-space:nowrap; }
+.m-inner { display:inline-flex; gap:3rem; animation:mq 20s linear infinite; }
+.m-inner span { font-family:'Playfair Display',serif; font-style:italic; font-size:0.95rem; color:rgba(237,233,248,0.1); }
+.m-inner .sep { font-size:0.45rem; color:var(--acc); align-self:center; font-style:normal; font-family:'Outfit',sans-serif; }
+@keyframes mq { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* PROJECTS */
+.work { padding:7rem 4rem; }
+.sh { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:4rem; }
+.sl { font-size:0.68rem; letter-spacing:0.2em; text-transform:uppercase; color:rgba(237,233,248,0.2); }
+.sc { font-family:'Playfair Display',serif; font-size:0.9rem; font-style:italic; color:rgba(237,233,248,0.12); }
+
+.proj-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1px; background:var(--border); border:1px solid var(--border); }
+
+.proj-card { background:var(--bg); overflow:hidden; cursor:none; transition:background 0.3s; position:relative; display:flex; flex-direction:column; }
+.proj-card:hover { background:var(--bg2); }
+.proj-card:hover .card-top-line { width:100%; }
+.proj-card:hover .proj-card-arrow { color:var(--acc); transform:rotate(0deg); }
+
+.card-top-line { position:absolute; top:0; left:0; height:2px; width:0; background:var(--acc); transition:width 0.4s cubic-bezier(0.23,1,0.32,1); }
+
+/* IMAGE AREA */
+.proj-img-wrap { width:100%; aspect-ratio:16/9; overflow:hidden; border-bottom:1px solid var(--border); position:relative; background:var(--bg2); }
+.proj-img-wrap img { width:100%; height:100%; object-fit:cover; transition:transform 0.5s cubic-bezier(0.23,1,0.32,1); display:block; }
+.proj-card:hover .proj-img-wrap img { transform:scale(1.04); }
+
+/* placeholder shown when no image */
+.proj-img-wrap .placeholder { position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:10px; }
+.ph-icon { width:40px; height:40px; opacity:0.15; }
+.ph-text { font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; color:rgba(168,85,247,0.3); }
+
+.proj-body { padding:1.5rem; flex:1; display:flex; flex-direction:column; gap:0.75rem; }
+.proj-card-num { font-family:'Playfair Display',serif; font-style:italic; font-size:0.72rem; color:var(--acc); opacity:0.5; }
+.proj-card-name { font-family:'Playfair Display',serif; font-size:1.25rem; color:var(--fg); line-height:1.15; }
+.proj-card-desc { font-size:0.8rem; line-height:1.8; color:var(--muted); flex:1; }
+.proj-card-footer { display:flex; justify-content:space-between; align-items:center; margin-top:0.5rem; }
+.p-tags { display:flex; gap:0.5rem; flex-wrap:wrap; }
+.tag { font-size:0.6rem; letter-spacing:0.1em; text-transform:uppercase; padding:0.25rem 0.65rem; border:1px solid rgba(168,85,247,0.15); color:rgba(168,85,247,0.5); border-radius:2px; }
+.proj-card-arrow { font-size:1.2rem; color:rgba(168,85,247,0.15); transition:color 0.25s,transform 0.35s cubic-bezier(0.23,1,0.32,1); transform:rotate(-45deg); }
+
+/* ABOUT */
+.about { padding:7rem 4rem; display:grid; grid-template-columns:1fr 1fr; gap:6rem; border-top:1px solid var(--border); background:var(--bg2); position:relative; overflow:hidden; }
+.about-glow { position:absolute; width:500px; height:500px; border-radius:50%; background:radial-gradient(circle,rgba(124,58,237,0.1) 0%,transparent 70%); right:-100px; top:-100px; pointer-events:none; }
+.about h2 { font-family:'Playfair Display',serif; font-size:clamp(2.2rem,4vw,3.8rem); line-height:1.08; color:var(--fg); }
+.about h2 em { color:var(--acc); font-style:italic; }
+.about-r { display:flex; flex-direction:column; justify-content:center; gap:2rem; }
+.about-p { font-size:0.88rem; line-height:2; color:var(--muted); }
+.sk-grid { display:grid; grid-template-columns:1fr 1fr; gap:0 2rem; }
+.sk { font-size:0.74rem; letter-spacing:0.05em; color:rgba(237,233,248,0.25); display:flex; align-items:center; gap:10px; padding:0.55rem 0; border-bottom:1px solid var(--border); }
+.sk::before { content:''; width:4px; height:4px; border-radius:50%; background:var(--acc); flex-shrink:0; }
+
+/* CONTACT */
+.contact { padding:7rem 4rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:3rem; position:relative; overflow:hidden; }
+.contact-glow { position:absolute; width:700px; height:700px; border-radius:50%; background:radial-gradient(circle,rgba(124,58,237,0.1) 0%,transparent 65%); left:-200px; top:-200px; pointer-events:none; }
+.contact h2 { font-family:'Playfair Display',serif; font-size:clamp(3rem,7vw,6rem); line-height:0.95; color:var(--fg); margin-bottom:1.5rem; }
+.contact h2 em { color:var(--acc); }
+.c-sub { font-size:0.8rem; color:var(--muted); letter-spacing:0.06em; }
+
+/* FOOTER */
+footer { padding:1.75rem 4rem; border-top:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; background:var(--bg2); }
+.f-copy { font-size:0.67rem; letter-spacing:0.1em; text-transform:uppercase; color:rgba(237,233,248,0.15); }
+.f-links { display:flex; gap:2rem; }
+.f-links a { font-size:0.67rem; letter-spacing:0.12em; text-transform:uppercase; color:rgba(237,233,248,0.2); text-decoration:none; transition:color 0.2s; }
+.f-links a:hover { color:var(--acc); }
+
+/* REVEAL */
+.reveal { opacity:0; transform:translateY(32px); transition:opacity 0.9s cubic-bezier(0.23,1,0.32,1),transform 0.9s cubic-bezier(0.23,1,0.32,1); }
+.reveal.on { opacity:1; transform:translateY(0); }
+
+@media (max-width: 768px) {
+  nav { padding:1.25rem 1.5rem; }
+  .n-links,.n-dot { display:none; }
+  .hero { padding:8rem 1.5rem 4rem; }
+  .hero-row { flex-direction:column; gap:2rem; align-items:flex-start; }
+  .work { padding:4rem 1.5rem; }
+  .proj-grid { grid-template-columns:1fr; }
+  .about { grid-template-columns:1fr; gap:3rem; padding:4rem 1.5rem; }
+  .contact { padding:4rem 1.5rem; }
+  footer { padding:1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<div id="cur"></div>
+<div id="cur-r"></div>
+
+<nav>
+  <a href="#" class="n-logo">Pumpkin</a>
+  <ul class="n-links">
+    <li><a href="#work">Projects</a></li>
+    <li><a href="#about">About</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+  <div class="n-dot"><span></span> Open to collabs</div>
+</nav>
+
+<section class="hero">
+  <div class="g1"></div>
+  <div class="g2"></div>
+  <div class="hero-tag">Protogen · Coder · Furry</div>
+  <h1>
+    Hi, I'm<br>
+    <span class="purple">Pumpkin</span><br>
+    <span class="ghost">I build stuff</span>
+  </h1>
+  <div class="hero-row">
+    <p class="hero-bio">Protogen furry who loves to code. Started with Python, picked up C++, C#, Java, and HTML along the way. I build things for fun and share everything I make.</p>
+    <div class="hero-btns">
+      <a href="#work" class="btn btn-solid">See My Projects</a>
+      <a href="#about" class="btn btn-line">About Me</a>
+    </div>
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="m-inner">
+    <span>Python</span><span class="sep">✦</span>
+    <span>C++</span><span class="sep">✦</span>
+    <span>C#</span><span class="sep">✦</span>
+    <span>Java</span><span class="sep">✦</span>
+    <span>HTML · CSS · JS</span><span class="sep">✦</span>
+    <span>Python</span><span class="sep">✦</span>
+    <span>C++</span><span class="sep">✦</span>
+    <span>C#</span><span class="sep">✦</span>
+    <span>Java</span><span class="sep">✦</span>
+    <span>HTML · CSS · JS</span><span class="sep">✦</span>
+  </div>
+</div>
+
+<section class="work" id="work">
+  <div class="sh reveal">
+    <span class="sl">My Projects</span>
+    <span class="sc">(04)</span>
+  </div>
+
+  <div class="proj-grid">
+
+    <!-- CARD 1 — replace src with your imgur direct link -->
+    <div class="proj-card reveal">
+      <div class="card-top-line"></div>
+      <div class="proj-img-wrap">
+        <img src="PASTE_IMGUR_DIRECT_LINK_HERE" alt="Project 1"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="placeholder" style="display:none">
+          <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="rgba(168,85,247,0.4)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span class="ph-text"><image class="png"></image></span>
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-card-num">01</div>
+        <div class="proj-card-name">Foundation blacksite</div>
+        <p class="proj-card-desc">foundtaion blacksite website is a website i made for player stats and mod powers like warning and banning for scp sl </p>
+        <div class="proj-card-footer">
+          <div class="p-tags"><span class="tag">HTML,JSON</span></div>
+          <span class="proj-card-arrow">→</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 2 -->
+    <div class="proj-card reveal">
+      <div class="card-top-line"></div>
+      <div class="proj-img-wrap">
+        <img src="PASTE_IMGUR_DIRECT_LINK_HERE" alt="Project 2"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="placeholder" style="display:none">
+          <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="rgba(168,85,247,0.4)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span class="ph-text">Add your image</span>
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-card-num">02</div>
+        <div class="proj-card-name">Project 2</div>
+        <p class="proj-card-desc">C++ project description goes here. What does it do? Why did you make it?</p>
+        <div class="proj-card-footer">
+          <div class="p-tags"><span class="tag">C++</span></div>
+          <span class="proj-card-arrow">→</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 3 -->
+    <div class="proj-card reveal">
+      <div class="card-top-line"></div>
+      <div class="proj-img-wrap">
+        <img src="PASTE_IMGUR_DIRECT_LINK_HERE" alt="Project 3"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="placeholder" style="display:none">
+          <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="rgba(168,85,247,0.4)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span class="ph-text">Add your image</span>
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-card-num">03</div>
+        <div class="proj-card-name">Project 3</div>
+        <p class="proj-card-desc">HTML/CSS/JS project description goes here. What does it do? Why did you make it?</p>
+        <div class="proj-card-footer">
+          <div class="p-tags"><span class="tag">HTML</span><span class="tag">CSS</span><span class="tag">JS</span></div>
+          <span class="proj-card-arrow">→</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- CARD 4 -->
+    <div class="proj-card reveal">
+      <div class="card-top-line"></div>
+      <div class="proj-img-wrap">
+        <img src="PASTE_IMGUR_DIRECT_LINK_HERE" alt="Project 4"
+             onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="placeholder" style="display:none">
+          <svg class="ph-icon" viewBox="0 0 24 24" fill="none" stroke="rgba(168,85,247,0.4)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+          <span class="ph-text">Add your image</span>
+        </div>
+      </div>
+      <div class="proj-body">
+        <div class="proj-card-num">04</div>
+        <div class="proj-card-name">Project 4</div>
+        <p class="proj-card-desc">Java and C# project description goes here. What does it do? Why did you make it?</p>
+        <div class="proj-card-footer">
+          <div class="p-tags"><span class="tag">Java</span><span class="tag">C#</span></div>
+          <span class="proj-card-arrow">→</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section class="about" id="about">
+  <div class="about-glow"></div>
+  <div class="reveal">
+    <h2>Protogen.<br>Coder.<br><em>Builder.</em></h2>
+  </div>
+  <div class="about-r reveal">
+    <p class="about-p">Hello! I'm a Protogen furry who loves coding. I started with Python, then learned C++, C#, Java, and HTML. I love creating projects and sharing what I make. My aesthetic is dark with purple — and this site is built exactly to that vibe.</p>
+    <div class="sk-grid">
+      <span class="sk">Python</span>
+      <span class="sk">C++</span>
+      <span class="sk">C#</span>
+      <span class="sk">Java</span>
+      <span class="sk">HTML</span>
+      <span class="sk">CSS</span>
+      <span class="sk">JavaScript</span>
+      <span class="sk">Git</span>
+    </div>
+  </div>
+</section>
+
+<section class="contact" id="contact">
+  <div class="contact-glow"></div>
+  <div class="reveal">
+    <h2>Let's build<br><em>something.</em></h2>
+    <p class="c-sub">// n0bat.</p>
+  </div>
+  <div class="reveal">
+    <a href="mailto:you@email.com" class="btn btn-solid">Say Hello →</a>
+  </div>
+</section>
+
+<footer>
+  <span class="f-copy">© 2026 Pumpkin — All rights reserved</span>
+  <div class="f-links">
+    <a href="#">GitHub</a>
+    <a href="#">Twitter</a>
+  </div>
+</footer>
+
+<script>
+  // Cursor
+  const cur = document.getElementById('cur');
+  const ring = document.getElementById('cur-r');
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener('mousemove', e => {
+    mx=e.clientX; my=e.clientY;
+    cur.style.left=mx+'px'; cur.style.top=my+'px';
+  });
+  (function anim(){
+    rx+=(mx-rx)*0.1; ry+=(my-ry)*0.1;
+    ring.style.left=rx+'px'; ring.style.top=ry+'px';
+    requestAnimationFrame(anim);
+  })();
+  document.querySelectorAll('a,button,.proj-card').forEach(el=>{
+    el.addEventListener('mouseenter',()=>{ ring.style.width='50px'; ring.style.height='50px'; });
+    el.addEventListener('mouseleave',()=>{ ring.style.width='32px'; ring.style.height='32px'; });
+  });
+
+  // Scroll reveal
+  const obs = new IntersectionObserver(entries=>{
+    entries.forEach((e,i)=>{ if(e.isIntersecting){ setTimeout(()=>e.target.classList.add('on'),i*100); obs.unobserve(e.target); } });
+  },{threshold:0.08});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+</script>
+</body>
+</html>
